@@ -1,54 +1,18 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { Register } from "../components/Register.jsx";
-import { Login } from "../components/Login.jsx";
-import { Private } from "../components/Private.jsx";
-import userServices from "../services/userServices.jsx";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Home = () => {
 
-	const { store, dispatch } = useGlobalReducer()
+	const navigate = useNavigate()
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
-
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
-
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
-
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-
-			return data
-
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
-
+	const handleProfile = () => {
+		localStorage.getItem("token") ? navigate("/private") : navigate("/login")
 	}
-
-	const handleClick = () => {
-		userServices.getUserInfo().then(data=> dispatch({type: "get_user_info", payload: data})
-		)
-	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
 
 	return (
 		<div className="text-center mt-5">
-			<h2>First register or log in</h2>
-			<Register />
-			<Login />
-			<h2>then</h2>
-			<button onClick={handleClick}>Get your info after login/registering</button>
-			{store.user && <Private />}
+			<h2>Welcome, go to <Link to={"/register"}>Register</Link> if you are new. else <Link to={"/login"}>Login</Link></h2>
+			<h2>Or you can go to your <span className="nav nav-link" onClick={handleProfile}>profile</span></h2>
 		</div>
 	);
 }; 

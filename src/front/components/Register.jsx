@@ -1,10 +1,12 @@
 import React, {useState} from "react"
 import userServices from "../services/userServices";
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
 
     const {store, dispatch} = useGlobalReducer()
+    const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
         email: "",
@@ -18,7 +20,7 @@ export const Register = () => {
     const handleSubmit = e => {
         e.preventDefault();
         console.log(formData)
-        userServices.register(formData).then(data => console.log(data));
+        userServices.register(formData).then(data => data.success && navigate("/login"));
 
     };
 

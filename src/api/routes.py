@@ -35,17 +35,16 @@ def register():
         existing_user = db.session.execute(stmt).scalar_one_or_none()
         if existing_user:
             raise Exception({"error": "email taken, try logging in"})
+        hashed_password = generate_password_hash(data["password"])
         new_user = User(
             email = data["email"],
-            password = data["password"],
+            password = hashed_password,
             is_active = True
         )
         db.session.add(new_user)
         db.session.commit()
 
-        token = create_access_token(identity=str(new_user.id))
-
-        return jsonify({"msg": "sign up ok", "token": token}), 201
+        return jsonify({"msg": "sign up ok, now log in", "success": True}), 201
     except Exception as e:
         print(e)
         db.session.rollback()
@@ -61,8 +60,12 @@ def login():
         user = db.session.execute(stmt).scalar_one_or_none()
         if not user:
             raise Exception({"error": "email not found"})
-        if (user.password != data["password"]):
-            raise Exception({"error": "wrong email or password"})
+
+        
+        # if (user.password != data["password"]):
+        #     raise Exception({"error": "wrong email or password"})
+        if not check_password_hash(user.password, data["password"]):
+            return jsonify({"success": False, "msg": "email or password wrong"})
         
         token = create_access_token(identity=str(user.id))
 

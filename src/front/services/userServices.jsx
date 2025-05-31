@@ -16,8 +16,8 @@ userServices.register = async (formData) => {
             throw new Error(text);
         }
         const data = JSON.parse(text);
-        localStorage.setItem("token", data.token)
-        return JSON.parse(text);
+
+        return data;
     } catch (error) {
         console.error("Register service error:", error.message);
         throw error;
@@ -31,7 +31,7 @@ userServices.getUserInfo = async () => {
             headers: {
                 "Content-Type": "application/json", 
                 "Authorization": "Bearer " + localStorage.getItem("token")
-            }
+            },
         });
         const text = await resp.text();
         if (!resp.ok) {
@@ -57,13 +57,13 @@ userServices.login = async (formData) => {
             body: JSON.stringify(formData)
         });
         const text = await resp.text();
+        const data = JSON.parse(text);
         if (!resp.ok) {
             console.error("Backend error", text);
-            throw new Error(text);
+            throw new Error(data.error || "Login failed");
         }
-        const data = JSON.parse(text);
         localStorage.setItem("token", data.token)
-        return JSON.parse(text);
+        return data;
     } catch (error) {
         console.error("Register service error:", error.message);
         throw error;
