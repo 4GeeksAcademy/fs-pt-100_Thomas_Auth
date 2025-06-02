@@ -28,9 +28,8 @@ export const Private = () => {
 
     return (
         <>
-            <h2>This is private!</h2>
-            <h3>Only for the eyes of: {store.user?.email}</h3>
-            <button onClick={handleLogout}>Logout</button>
+            <h2 className="card-title mb-3">This page is top, top secret! Don't tell anyone</h2>
+            <button onClick={handleLogout} className="btn btn-primary w-100">Logout</button>
         </>
     );
 };

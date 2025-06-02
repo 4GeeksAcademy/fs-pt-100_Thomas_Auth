@@ -10,9 +10,20 @@ export const Home = () => {
 	}
 
 	return (
-		<div className="text-center mt-5">
-			<h2>Welcome, go to <Link to={"/register"}>Register</Link> if you are new. else <Link to={"/login"}>Login</Link></h2>
-			<h2>Or you can go to your <span className="nav nav-link" onClick={handleProfile}>profile</span></h2>
+		<div className="container-fluid vh-100 d-flex justify-content-center align-items-center">
+			<div className="card border-primary text-center">
+				<div className="card-body d-flex flex-column justify-content-center">
+					<h2 className="card-title mb-3">Welcome to my secure site!</h2>
+					<h4 className="card-subtitle mb-4">From here, you can:</h4>
+					<ul className="list-unstyled mb-0">
+						<li className="mb-2"><Link to={"/register"} className="text-primary text-decoration-none">Register</Link></li>
+						<li className="mb-2"><Link to={"/login"} className="text-primary text-decoration-none">Login</Link></li>
+						<li className="mb-2">Go directly to your <span className="text-primary text-decoration-none" onClick={handleProfile}>
+							secret page</span>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	);
 }; 

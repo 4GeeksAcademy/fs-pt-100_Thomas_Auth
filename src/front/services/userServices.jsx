@@ -56,10 +56,9 @@ userServices.login = async (formData) => {
             },
             body: JSON.stringify(formData)
         });
-        const text = await resp.text();
-        const data = JSON.parse(text);
+        const data = await resp.json();
         if (!resp.ok) {
-            console.error("Backend error", text);
+            console.error("Backend error", data);
             throw new Error(data.error || "Login failed");
         }
         localStorage.setItem("token", data.token)
